@@ -6,16 +6,16 @@ import {
 import SearchIcon from '@mui/icons-material/Search'
 
 export interface HomePageAskProps {
-  setAsks: React.Dispatch<React.SetStateAction<string[]>>
+  askPrompt: (prompt: string) => Promise<void>
 }
 
 export default function HomePageAsk(props: HomePageAskProps) {
   const [inputValue, setInputValue] = React.useState<string>('')
 
-  const handleSendAsk = useCallback(() => {
-    props.setAsks((prev) => [...prev, inputValue])
+  const handleAskPrompt = useCallback(() => {
+    props.askPrompt(inputValue.trim())
     setInputValue('')
-  }, [props, inputValue])
+  }, [inputValue, props])
 
   return (
     <Stack
@@ -27,7 +27,7 @@ export default function HomePageAsk(props: HomePageAskProps) {
       width="65%"
       left="50%"
       minWidth={550}
-      bottom="25px"
+      top="calc(100vh - 105px)"
       sx={{
         transform: 'translate(-50%, 0)',
       }}
@@ -39,18 +39,21 @@ export default function HomePageAsk(props: HomePageAskProps) {
         spacing={2}
         p="3px 5px"
         width="100%"
-        className="border border-black/10 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)]"
+        className="bg-white border border-black/10 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)]"
       >
         <InputBase
           sx={{ ml: 1, flex: 1 }}
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value.trim())}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleAskPrompt()
+          }}
         />
         <IconButton
           type="button"
           sx={{ p: '10px' }}
           aria-label="ask"
-          onClick={handleSendAsk}
+          onClick={handleAskPrompt}
         >
           <SearchIcon />
         </IconButton>

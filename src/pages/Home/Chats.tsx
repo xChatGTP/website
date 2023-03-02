@@ -5,6 +5,10 @@ import { Box, Stack, Typography } from '@mui/material'
 import chatGTPLogo from '../../assets/chatGTP.svg'
 import ChatBlock from '../../components/Chat/Block'
 
+export interface HomePageChatsProps {
+  blocks: string[][]
+}
+
 function NoInputResponse() {
   return (
     <Stack
@@ -27,7 +31,8 @@ function NoInputResponse() {
   )
 }
 
-export default function HomePageResponses() {
+export default function HomePageChats(props: HomePageChatsProps) {
+  const { blocks } = props
   return (
     <>
       {/* <NoInputResponse /> */}
@@ -37,13 +42,22 @@ export default function HomePageResponses() {
         alignItems="flex-start"
         height="100vh"
         width="100%"
+        overflow="scroll"
+        pb={18}
       >
-        <ChatBlock>
-          Swap ETH to USDC
-        </ChatBlock>
-        <ChatBlock>
-          Hello, I'm ChatGTP. I'm a chatbot that can help you create GTP .
-        </ChatBlock>
+        {
+          blocks.length ? (
+            blocks.map((texts: string[], idx) => (
+              <ChatBlock key={idx}>
+                {texts.map((text: string, jdx: number) => (
+                  <Typography variant="body1" noWrap={false} key={jdx}>{text}</Typography>
+                ))}
+              </ChatBlock>
+            ))
+          ) : (
+            <NoInputResponse />
+          )
+        }
       </Stack>
     </>
   )

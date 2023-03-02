@@ -12,8 +12,11 @@ export default function ChatBlock(props: PropsWithChildren) {
       borderBottom="1px solid rgba(0, 0, 0, 0.1)"
       width="100%"
       sx={{
-        '&:odd-child': {
+        '&:nth-of-type(odd)': {
           backgroundColor: 'rgb(249 250 251)',
+        },
+        '&:nth-of-type(odd) .chat-block-avatar-bot, &:nth-of-type(even) .chat-block-avatar-user': {
+          display: 'none',
         },
       }}
     >
@@ -28,7 +31,7 @@ export default function ChatBlock(props: PropsWithChildren) {
         m="0 auto"
       >
         <Box>
-          <Box><img src={chatGTPLogo} alt="ChatGTP" width="32px" /></Box>
+          <Box className="chat-block-avatar-bot"><img src={chatGTPLogo} alt="ChatGTP" width="32px" /></Box>
           <Stack
             direction="row"
             justifyContent="center"
@@ -36,6 +39,7 @@ export default function ChatBlock(props: PropsWithChildren) {
             width="32px"
             height="32px"
             bgcolor="rgb(67, 126, 180)"
+            className="chat-block-avatar-user"
             sx={{
               borderRadius: 0.5,
             }}
