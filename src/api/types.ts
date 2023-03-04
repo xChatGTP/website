@@ -29,4 +29,10 @@ interface MapSwapReturn {
   },
 }
 
+export interface GTPCombineReturn {
+  tos: string[],
+  datas: string[],
+  configs: string[],
+}
+
 export type GTPMappingReturn = MapSwapReturn
