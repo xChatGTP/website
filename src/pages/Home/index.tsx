@@ -1,13 +1,23 @@
+import { utils } from 'ethers'
 import React, { useCallback, useState } from 'react'
+import { useContract, useSigner } from 'wagmi'
 
 import { BodyWithSidebar } from '../../layouts/BodyWithSidebar'
 import HomePageChats from './Chats'
 import HomePageAsk from './Ask'
 import GTPApi from '../../api'
 import { GTPCombineReturn, GTPMappingReturn } from '../../api/types'
+import GTPAbi from '../../abis/GTP.json'
+import { GTP } from '../../types/contracts'
 
 export default function HomePage() {
-  // TODO: use redux to manage state
+  const { data: signer } = useSigner()
+  const gtpContract = useContract({
+    address: '0x236A80A4cCf06e8EE6d869B318447d10983D7c03',
+    abi: GTPAbi,
+    signerOrProvider: signer,
+  })
+
   const [blocks, setBlocks] = useState<string[][]>([])
   const [gtpResponses, setGtpResponses] = useState<GTPMappingReturn[]>([])
   const [executionData, setExecutionData] = useState<GTPCombineReturn>()
@@ -48,8 +58,14 @@ export default function HomePage() {
   }, [gtpResponses])
 
   const executeTransactions = useCallback(() => {
+    if (!gtpContract) return
+    if (!executionData?.tos) return
+
     console.log(executionData)
-  }, [executionData])
+    const { tos, configs, datas } = executionData; // semi-colon required for next line (type casting)
+
+    (gtpContract as GTP).batchExec(tos, configs, datas, { value: utils.parseEther('0.3'), gasLimit: 3_000_000 })
+  }, [gtpContract, executionData])
 
   return (
     <BodyWithSidebar>

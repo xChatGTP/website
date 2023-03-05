@@ -30,7 +30,8 @@ import {
 
 const { chains, provider } = configureChains(
   [
-    chain.goerli, chain.polygonMumbai, avalancheFujiChain, klaytnBaobabChain,
+    chain.polygonMumbai,
+    // chain.goerli, , avalancheFujiChain, klaytnBaobabChain,
   ],
   [
     // alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }),
